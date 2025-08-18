@@ -23,6 +23,8 @@ export const newUserSchema = userSchama.extend({confirmPassword: z.string()}).su
         ctx.addIssue({code:"custom", message:"Les mots de passe ne correspondent pas"})
     }
 })
+
+export const loginSchema = userSchama.pick({email: true, password: true})
 export const businessSchema = z.object({
     id: z.number().optional(),
     businessName: z.string().min(1,{message:"Merci de renseigner le nom de votre entreprise"}),

@@ -1,10 +1,12 @@
 "use server";
 import { prisma } from "@/config/db";
-import { IResponse, newUserSchema, userSchama } from "@/types";
+import { IResponse, loginSchema, newUserSchema, userSchama } from "@/types";
 import { revalidatePath } from "next/cache";
 import bcryptjs from "bcryptjs"
 import generateVerificationCode from "@/lib/generateVerificationCode";
 import { sendEmail } from "@/lib/sendEmail";
+import { setAuthCookie, signAuthToken } from "@/auth/auth";
+import { set } from "zod";
 
 
 export async function registerUser(formData: FormData){ 
@@ -77,4 +79,59 @@ export async function registerUser(formData: FormData){
             data: null
         }
     }
+}
+
+export async function loginUser(formData: FormData){ 
+    try {
+        const email = formData.get("email") as string
+        const password = formData.get("password") as string
+
+        const validationResult = await loginSchema.safeParseAsync({email, password}) 
+
+        if(!validationResult.success){
+            return {
+                message: validationResult.error.issues[0].message,
+                status:"error",
+                data: null
+            }
+        }   
+
+        const user = await prisma.user.findUnique({
+            where: {
+                email: email
+            }
+        })
+
+        if(!user){
+            return {
+                message:"Utilisateur introuvable",
+                status:"error",
+                data: null
+            }
+        }
+
+        const isPasswordValid = await bcryptjs.compare(password, user.password)
+
+        if(!isPasswordValid){
+            return {
+                message:"Mot de pass ou email incorrect",
+                status:"error",
+                data: null
+            }   
+        } 
+        const token = await signAuthToken({id:user.id, email:user.email, name:user.name})
+        await setAuthCookie(token)
+        return {
+            message:"Connexion reussie",
+            status:"success",
+            data: user.id
+        }
+    } catch (error) {
+        console.log(error);
+        return {
+            message:"Une erreur s'est produite",
+            status:"error",
+            data: null
+        }
+    }   
 }
