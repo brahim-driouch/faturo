@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="70" viewBox="0 0 260 70">
+  <!-- Abstract F-shaped icon -->
+  <g transform="translate(10,10)">
+    <rect x="0" y="0" width="12" height="40" fill="#1e3a8a" rx="2"/>
+    <rect x="12" y="0" width="20" height="8" fill="#f97316" rx="2"/>
+    <rect x="12" y="16" width="16" height="6" fill="#2563eb" rx="2"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="60" y="45"
+        font-family="Segoe UI, Helvetica, Arial, sans-serif"
+        font-size="36"
+        font-weight="bold"
+        fill="#111827">
+    Facturo
+  </text>
+</svg>
