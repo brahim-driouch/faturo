@@ -14,12 +14,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model BusinessDomain {
+  id  Int @id @default(autoincrement())
+  code String
+  libelle String
+  slug String
+  Businesses Business[]
+}
+
 model Business {
   id  Int @id @default(autoincrement())
   businessName String
   businessPhoneNums String[]
-  busiessAdress String
+  businessAddress String
   businessEmails String[]
+  businessLegalId String?
+  businessDomain BusinessDomain @relation(fields: [businessDomainId],references: [id])
+  businessDomainId Int
   user User?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

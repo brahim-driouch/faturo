@@ -6,7 +6,9 @@ export  async function middleware(req: NextRequest) {
 
   // Define public and private paths
   const isPublicPath = pathname === "/users/login" || pathname === "/users/new";
+  const isHomePath = pathname === "/"
   const isPrivatePath = pathname.startsWith("/in");
+  const onBoardingPath = pathname.startsWith("/onboarding")
 
   // Read cookie from the request
   const token = req.cookies.get("faturio_session")?.value; // adjust name to your cookie
@@ -14,7 +16,7 @@ export  async function middleware(req: NextRequest) {
 
   if (token) {
     try {
-      user = await verifyAuthToken<{ email: string; id: string; name: string }>(
+      user = await verifyAuthToken<{ email: string; id: string; name: string,businessId:number,isActive:boolean }>(
         token
       );
     } catch (err) {
@@ -22,14 +24,22 @@ export  async function middleware(req: NextRequest) {
     }
   }
 
+  if(onBoardingPath && user?.businessId && user?.isActive) return NextResponse.redirect(new URL("/in/dashboard",req.url))
+
   // Redirects based on authentication
-  if (isPublicPath && user) {
+  if (isPublicPath && user && !isHomePath) {
+  
     return NextResponse.redirect(new URL("/in/dashboard", req.url));
   }
 
   if (isPrivatePath && !user) {
     return NextResponse.redirect(new URL("/users/login", req.url));
   }
+
+  if(user && isPrivatePath && (!user?.isActive || !user?.businessId )) return NextResponse.redirect(new URL("/onboarding",req.url))
+
+  
+
 
   // If no conditions matched, just continue
   return NextResponse.next();

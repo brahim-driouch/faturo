@@ -1,34 +1,21 @@
+// hooks/auth.ts
 "use client";
-import { useEffect, useState } from "react";
+
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+
+async function fetchUser() {
+  const res = await fetch("/api/auth", { credentials: "include" });
+  if (!res.ok) return null;
+  const data = await res.json();
+  
+  return data ?? null;
+}
 
 export default function useAuth() {
-  const [user, setUser] = useState<{ email: string; id: string; name: string } | null>(null);
-  const [pending, setPending] = useState(true);
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch("/api/auth", {
-          credentials: "include", // ✅ ensures cookies are sent
-        });
-
-        if (!response.ok) {
-          setUser(null);
-          return;
-        }
-
-        const data = await response.json();
-       
-        setUser(data ?? null);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setPending(false);
-      }
-    };
-
-    getUser();
-  }, []);
-
-  return { user, pending };
+  return useQuery({
+    queryKey: ["auth"],
+    queryFn: fetchUser,
+    staleTime: 1000 * 60, // cache user for 1 min
+    retry: false,
+  });
 }

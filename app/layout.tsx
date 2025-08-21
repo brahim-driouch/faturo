@@ -26,21 +26,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
 
        
 
-       
+      <div className="w-full min-h-screen flex flex-col justify-between items-center">
+
+     
         <MyQueryClientProvider>
-             <Header/>
+              <Header/>
        <Toaster position="top-center"/>
            {children}
-        <Footer/>
+       
         </MyQueryClientProvider>
-      
+         <Footer/>
+       </div>
       </body>
     </html>
   );

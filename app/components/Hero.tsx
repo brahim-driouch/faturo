@@ -2,7 +2,7 @@ import { CheckCircle } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className=" text-black py-20 px-6 border-t border-gray-200">
+    <section className=" text-black  py-24 px-6 ">
       <div className="max-w-5xl mx-auto text-center">
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl font-bold mb-6">

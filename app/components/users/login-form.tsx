@@ -1,6 +1,6 @@
 "use client";
-import {  loginUser } from "@/app/users.actions";
-import { useMutation } from "@tanstack/react-query";
+import {  loginUser } from "@/app/actions/users.actions";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -8,13 +8,15 @@ export const LoginForm = () => {
 
     const inputClass = " w-full p-2 border border-gray-300 rounded-md";
     const router = useRouter();
-
+    const queryClient = useQueryClient();
     const mutation = useMutation({
         mutationFn:loginUser,
-        onSuccess: (data) => {
+        onSuccess: async(data) => {
             if(data.status === "success"){
                 toast.success(data.message);
+                await queryClient.invalidateQueries({queryKey: ["auth"]});
                 router.push("/in/dashboard");
+                
 
             }else {
                 toast.error(data.message);
@@ -22,7 +24,8 @@ export const LoginForm = () => {
         },
         onError: (error) => {
             toast.error(error.message ?? "Une erreur s'est produite");
-        }
+        },
+        
     })
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

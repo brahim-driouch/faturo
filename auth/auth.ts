@@ -66,3 +66,18 @@ export async function deleteAuthToken(){
 }
 
 
+
+export async function getCurrentSession(){
+    try {
+    const token = await getAuthCookie()
+    if(!token) return null
+    const user = await verifyAuthToken<{ email: string; id: string; name: string,isActive:boolean,businessId:string }>(token)
+    return user
+}
+        
+     catch (error) {
+        console.log(error)
+        return null 
+    }
+
+}

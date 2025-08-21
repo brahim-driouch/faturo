@@ -119,7 +119,7 @@ export async function loginUser(formData: FormData){
                 data: null
             }   
         } 
-        const token = await signAuthToken({id:user.id, email:user.email, name:user.name})
+        const token = await signAuthToken({id:user.id, email:user.email, name:user.name, businessId:user.businessId})
         await setAuthCookie(token)
         return {
             message:"Connexion reussie",

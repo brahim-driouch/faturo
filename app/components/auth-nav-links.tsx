@@ -1,4 +1,3 @@
-// components/AuthNavLinks.tsx
 "use client";
 
 import useAuth from "@/hooks/auth";
@@ -6,15 +5,15 @@ import Link from "next/link";
 import { authLinks } from "@/navlinks/authLinks";
 
 const AuthNavLinks = () => {
-  const { user, pending } = useAuth();
+  const { data: user, isLoading } = useAuth();
 
   return (
     <>
       {authLinks.map((link) => (
         <li key={link.title}>
-          {pending ? (
+          {isLoading ? (
             // Skeleton placeholder while loading
-            <div className="px-4 py-2 rounded font-medium shadow-md bg-gray-300 opacity-0 select-none">
+            <div className="px-4  rounded font-medium shadow-md bg-gray-300 opacity-0 select-none">
               {link.title}
             </div>
           ) : !user ? (

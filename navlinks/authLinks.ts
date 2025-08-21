@@ -4,10 +4,10 @@
 export const authLinks = [
     {
         title: "Connexion",
-        href: "/login",
+        href: "/users/login",
     },
     {
         title: "Inscription",
-        href: "/register",
+        href: "/users/new",
     },
 ];

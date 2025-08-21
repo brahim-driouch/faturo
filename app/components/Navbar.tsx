@@ -3,27 +3,27 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav>
-      <ul className="flex space-x-4">
-        <li>
-          <a href="#features" className="hover:text-blue-400 transition">
+    <nav className="py-2">
+      <ul className="flex items-center space-x-4">
+        <li> 
+          <Link href={'#'}  className="hover:text-blue-400 transition">
             Fonctionnalités
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="#dashboard" className="hover:text-blue-400 transition">
+          <Link href={'#'}  className="hover:text-blue-400 transition">
             Tableau de bord
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="#testimonials" className="hover:text-blue-400 transition">
+          <Link href={'#'} className="hover:text-blue-400 transition">
             Témoignages
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="#contact" className="hover:text-blue-400 transition">
+          <Link href={'#'} className="hover:text-blue-400 transition">
             Contact
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

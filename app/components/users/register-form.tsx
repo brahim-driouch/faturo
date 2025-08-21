@@ -1,5 +1,5 @@
 "use client";
-import { registerUser } from "@/app/users.actions";
+import { registerUser } from "@/app/actions/users.actions";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 

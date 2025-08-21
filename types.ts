@@ -25,10 +25,19 @@ export const newUserSchema = userSchama.extend({confirmPassword: z.string()}).su
 })
 
 export const loginSchema = userSchama.pick({email: true, password: true})
+
+
+
+
 export const businessSchema = z.object({
-    id: z.number().optional(),
-    businessName: z.string().min(1,{message:"Merci de renseigner le nom de votre entreprise"}),
-    businessPhoneNums: z.array(z.string()).optional(),
-    businessEmails: z.array(z.string()).optional(),
-    busiessAdress: z.string().min(4,{message:"Merci de renseigner l'adresse de votre entreprise"}),
+    id:z.number().optional(),
+    businessName:z.string().min(2,{message:" Veuillez entrer le nom de votre entreprise."}),
+    businessPhoneNums:z.array(z.string()).optional(),
+    businessAddress:z.string().min(2,{message:" Veuillez entrer l'adresse de votre entreprise."}),
+    businessEmails:z.array(z.email({message:" Veuillez entrer un email valide."})),
+    createdAt:z.date().optional(),
+    updatedAt:z.date().optional(),
+    businessLegalId:z.string().optional(),
+    user:z.string().optional(),
+    businessDomainId:z.number().positive()
 })
