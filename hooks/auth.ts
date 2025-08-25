@@ -2,7 +2,7 @@
 "use client";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-
+  
 async function fetchUser() {
   const res = await fetch("/api/auth", { credentials: "include" });
   if (!res.ok) return null;
@@ -15,7 +15,6 @@ export default function useAuth() {
   return useQuery({
     queryKey: ["auth"],
     queryFn: fetchUser,
-    staleTime: 1000 * 60, // cache user for 1 min
-    retry: false,
+    
   });
 }

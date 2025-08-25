@@ -23,8 +23,8 @@ export  async function middleware(req: NextRequest) {
       user = null; // invalid/expired token
     }
   }
-
-  if(onBoardingPath && user?.businessId && user?.isActive) return NextResponse.redirect(new URL("/in/dashboard",req.url))
+  if(onBoardingPath && !user) return NextResponse.redirect(new URL("/",req.url))
+    if(onBoardingPath && user?.isActive && user?.businessId) return NextResponse.redirect(new URL("/in/dashboard",req.url))
 
   // Redirects based on authentication
   if (isPublicPath && user && !isHomePath) {
@@ -35,7 +35,7 @@ export  async function middleware(req: NextRequest) {
   if (isPrivatePath && !user) {
     return NextResponse.redirect(new URL("/users/login", req.url));
   }
-
+   
   if(user && isPrivatePath && (!user?.isActive || !user?.businessId )) return NextResponse.redirect(new URL("/onboarding",req.url))
 
   

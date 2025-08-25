@@ -14,15 +14,15 @@ function OnBoardingPage() {
 
     if(isLoading) return null
 
-    // if(!user.isActive) return (
-    //     <div className="w-full min-h-screen items-start justify-center">
-    //         <ActivateAccountForm/>
-    //     </div>
-    // )
-
+   
     if(!user.businessId) return(
          <div className="w-full py-20  items-start justify-center">
             <AddBusinessForm/>
+        </div>
+    )
+     if(!user.isActive) return (
+        <div className="w-full min-h-screen items-start justify-center">
+            <ActivateAccountForm/>
         </div>
     )
     

@@ -30,7 +30,7 @@ export async function createBusiness(formdata:FormData){
                  businessAddress, businessEmails, 
                  businessLegalId, 
                 businessDomainId:parseInt(businessDomainId)})
-   console.log(validationResult)
+   
         if(!validationResult.success){
             return {
                 message: validationResult.error.issues[0].message,
@@ -68,7 +68,7 @@ export async function createBusiness(formdata:FormData){
                 }
             });
         });
-
+ 
         return {
             message:"Ajouté avec success",
             status:"success",
@@ -77,7 +77,7 @@ export async function createBusiness(formdata:FormData){
 
 
     } catch (error) {
-        console.log(error);
+        console.log(error instanceof Error ? error.message : error);
         return {
             message:"Une erreur s'est produite",
             status:"error",

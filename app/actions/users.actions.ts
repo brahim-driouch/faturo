@@ -7,6 +7,7 @@ import generateVerificationCode from "@/lib/generateVerificationCode";
 import { sendEmail } from "@/lib/sendEmail";
 import { setAuthCookie, signAuthToken } from "@/auth/auth";
 import { set } from "zod";
+import { is } from "zod/locales";
 
 
 export async function registerUser(formData: FormData){ 
@@ -119,8 +120,10 @@ export async function loginUser(formData: FormData){
                 data: null
             }   
         } 
-        const token = await signAuthToken({id:user.id, email:user.email, name:user.name, businessId:user.businessId})
+       
+        const token = await signAuthToken({id:user.id, email:user.email, name:user.name, businessId:user.businessId,isActive:user.isActive})
         await setAuthCookie(token)
+
         return {
             message:"Connexion reussie",
             status:"success",

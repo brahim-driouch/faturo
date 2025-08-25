@@ -41,3 +41,32 @@ export const businessSchema = z.object({
     user:z.string().optional(),
     businessDomainId:z.number().positive()
 })
+
+
+export const productcategorySchema = z.object({
+    id: z.number().optional(),
+    name: z.string().min(4, { message: "Merci de renseigner votre nom" }),
+    businessId: z.number().positive().optional(),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
+})
+
+export type ProductCategoryType = z.infer<typeof productcategorySchema>;
+
+
+export const productSchema = z.object({
+    id: z.number().optional(),
+    name: z.string().min(4, { message: "Merci de renseigner le nom du produit" }),
+    description: z.string().optional(),
+    price: z.number().positive({ message: "Le prix doit être un nombre positif" }),
+    costPrice: z.number().positive({ message: "Le prix de revient doit être un nombre positif" }),
+    categoryId: z.number().int().positive().nullable().optional(),
+    businessId: z.number().positive(),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
+    sku: z.string().optional(),
+    quantity: z.number().positive({ message: "La quantité doit être un nombre positif" }),
+    minQuantity: z.number().positive({ message: "La quantité minimale doit être un nombre positif" }).optional(),
+    unit: z.string().optional(),
+    isActive: z.boolean().default(true),
+});
