@@ -4,33 +4,20 @@ import { useState } from "react";
 import { Package, Plus, Edit, Trash2, X } from "lucide-react";
 import ModalContainer from "@/app/components/modal-container";
 import AddProductForm from "@/app/components/products/add-product-form";
+import useAuth from "@/hooks/auth";
+import { useProducts } from "@/hooks/products";
+import ProductItem from "@/app/components/products/product-item";
+import EditProductForm from "@/app/components/products/edit-product-form";
 
 const StockPage = () => {
   const [showAddProductModal, setShowAddProductModal] = useState(false);
-  // Mock stock data
-  const [stock, setStock] = useState([
-    {
-      id: 1,
-      name: "Laptop Dell Inspiron",
-      quantity: 12,
-      price: 7500,
-      status: "In Stock",
-    },
-    {
-      id: 2,
-      name: "iPhone 15 Pro Max",
-      quantity: 5,
-      price: 16000,
-      status: "Low Stock",
-    },
-    {
-      id: 3,
-      name: "Samsung 4K Monitor",
-      quantity: 0,
-      price: 2500,
-      status: "Out of Stock",
-    },
-  ]);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
+
+  const {data: user} = useAuth();
+  const {data} = useProducts(user?.businessId || "");
+  
+  const stock = data?.data || [];
+
 
   return (
     <div className="p-6 w-full bg-gray-50 min-h-screen">
@@ -60,6 +47,8 @@ const StockPage = () => {
                  </ModalContainer>
             
        )  }
+
+        
   
 
       {/* Stock Overview */}
@@ -71,7 +60,7 @@ const StockPage = () => {
         <div className="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
           <h2 className="text-gray-500 text-lg">Produits en Stock</h2>
           <p className="text-3xl font-bold text-green-600">
-            {stock.filter((item) => item.quantity > 0).length}
+            {stock?.filter((item) => item.quantity > 0).length}
           </p>
         </div>
         <div className="bg-white rounded-2xl shadow p-4 flex flex-col items-center">
@@ -98,35 +87,7 @@ const StockPage = () => {
             </thead>
             <tbody>
               {stock.map((item) => (
-                <tr
-                  key={item.id}
-                  className=" border-b border-gray-200 hover:bg-gray-50 transition"
-                >
-                  <td className="p-2">{item.name}</td>
-                  <td className="p-2 text-center">{item.quantity}</td>
-                  <td className="p-2 text-center">{item.price}</td>
-                  <td className="p-2 text-center">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        item.status === "In Stock"
-                          ? "bg-green-100 text-green-600"
-                          : item.status === "Low Stock"
-                          ? "bg-yellow-100 text-yellow-600"
-                          : "bg-red-100 text-red-600"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="p-2 flex justify-center gap-3">
-                    <button className="p-2 bg-blue-100 hover:bg-blue-200 rounded-lg">
-                      <Edit className="w-3 h-3 text-blue-600" />
-                    </button>
-                    <button className="p-2 bg-red-100 hover:bg-red-200 rounded-lg">
-                      <Trash2 className="w-3 h-3 text-red-600" />
-                    </button>
-                  </td>
-                </tr>
+                <ProductItem item={item} key={item.id}/>
               ))}
             </tbody>
           </table>

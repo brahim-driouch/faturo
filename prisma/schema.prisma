@@ -53,7 +53,7 @@ model User {
 model Product {
   id             Int       @id @default(autoincrement())
   name           String    // Nom du produit (obligatoire)
-  sku            String?    @unique // Code unique produit (optionnel mais conseillé)
+  sku            String?   
   description    String?   // Description optionnelle
   price          Float     // Prix unitaire (obligatoire)
   costPrice      Float?    // Prix d'achat (optionnel, utile pour la marge)

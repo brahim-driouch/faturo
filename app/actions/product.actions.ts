@@ -3,6 +3,7 @@
 import { getCurrentSession } from "@/auth/auth";
 import { prisma } from "@/config/db";
 import { productSchema } from "@/types";
+import { revalidatePath } from "next/cache";
 import { isValid } from "zod/v3";
 
 /**
@@ -84,7 +85,6 @@ const quantity = Number(formdata.get("quantity"));
 const isActive = formdata.get("isActive") === "true";
 const unit = formdata.get("unit") as string;
 
- 
 
     const user = await getCurrentSession();
     if (!user) {
@@ -132,8 +132,7 @@ if (isNaN(quantity) || quantity < 0) {
     });
 
     if (!validationResult.success) {
-      console.log(validationResult.error.issues);
-
+   console.log(validationResult.error.issues);
       return {
         status: "error",
         message: validationResult.error.issues[0].message,
@@ -164,6 +163,7 @@ if (isNaN(quantity) || quantity < 0) {
       },
     });
 
+    revalidatePath("/in/stock");
     return {
       status: "success",
       message: "Produit ajouté avec succès.",

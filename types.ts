@@ -66,7 +66,11 @@ export const productSchema = z.object({
     updatedAt: z.date().optional(),
     sku: z.string().optional(),
     quantity: z.number().positive({ message: "La quantité doit être un nombre positif" }),
-    minQuantity: z.number().positive({ message: "La quantité minimale doit être un nombre positif" }).optional(),
+    minQuantity: z.number().positive({ message: "La quantité minimale doit être un nombre positif" }).nullable().optional(),
     unit: z.string().optional(),
     isActive: z.boolean().default(true),
 });
+export type ProductType = z.infer<typeof productSchema>;
+export type WithRelation<T, R extends Record<string, any>> = T & R;
+export type ProductWithCategory = WithRelation<ProductType, { category: ProductCategoryType | null }>;
+

@@ -6,13 +6,16 @@ import { addProduct } from "@/app/actions/product.actions";
 import { toast } from "sonner";
 import { useCategories } from "@/hooks/categories";
 import useAuth from "@/hooks/auth";
+import { ProductWithCategory } from "@/types";
 
-export default function AddProductFormTabs() {
+export default function EditProductForm({product}: {product:ProductWithCategory}) {
   const [activeTab, setActiveTab] = useState(0);
+    const [_, setProduct] = useState<ProductWithCategory>(product);
   const {data:user} =useAuth()
   const {data}= useCategories(user?.businessId || "");
   const productForm = useRef<HTMLFormElement>(null);
  const categoryOptions = data?.data || [];
+
 
   const tabs = [
     { id: 0, label: "Champs obligatoires", icon: CheckCircle },
@@ -28,6 +31,12 @@ export default function AddProductFormTabs() {
     e.preventDefault(); // ⬅️ Prevent accidental submit
     setActiveTab((prev) => Math.max(prev - 1, 0));
   };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    setProduct((prev) => ({ ...prev, [name]: value }));
+  }
 
   // add product mutation
   const mutation = useMutation({
@@ -104,30 +113,40 @@ export default function AddProductFormTabs() {
           {/* Step 1: Required fields */}
           <div className="w-full flex-shrink-0 px-2 space-y-4">
             <input
+            onChange={handleChange}
+            value={product.name}
               type="text"
               name="name"
               placeholder="Nom du produit"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
+            onChange={handleChange}
+            value={product.price}
               type="text"
               name="price"
               placeholder="Prix du produit"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
+            onChange={handleChange}
+            value={product.costPrice}
               type="text"
               name="costPrice"
               placeholder="Prix de revient"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
+            onChange={handleChange}
+            value={product.quantity}
               type="text"
               name="quantity"
               placeholder="Quantité"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <select
+            onChange={handleChange}
+            value={product.isActive.toString()}
               name="isActive"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
@@ -139,35 +158,46 @@ export default function AddProductFormTabs() {
           {/* Step 2: Optional fields */}
           <div className="w-full flex-shrink-0 px-2 space-y-4">
             <input
+            onChange={handleChange}
+            value={product.description || ""}
               type="text"
               name="description"
               placeholder="Description du produit"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <select
+            onChange={handleChange}
+            value={product.categoryId || ""}
               name="categoryId"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option disabled value="">Sélectionner une catégorie</option>
               {categoryOptions?.map((category) => (
-                <option key={category.id} value={category.id}>
+               <option key={category.id} 
+                value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
             <input
+            onChange={handleChange}
+            value={product.sku || ""}
               type="text"
               name="sku"
               placeholder="Code SKU"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
+            onChange={handleChange}
+            value={product.minQuantity || ""}
               type="text"
               name="minQuantity"
               placeholder="Quantité minimale pour alerte"
               className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
+            onChange={handleChange}
+            value={product.unit || ""}
               type="text"
               name="unit"
               placeholder="Unité (kg, pcs, etc.)"
